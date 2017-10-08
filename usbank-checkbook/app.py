@@ -1,10 +1,7 @@
-from cloudant import Cloudant
-from flask import Flask, render_template, request, jsonify, abort, make_response, send_file
-import atexit
+from flask import Flask, request, jsonify, abort, make_response, send_file
 import cf_deployment_tracker
 import os
 import requests
-import json
 from pymongo import MongoClient
 
 # Emit Bluemix deployment event
@@ -15,32 +12,6 @@ app = Flask(__name__)
 mongo_client = MongoClient(os.getenv('MONGO_URI'), ssl_ca_certs="./mongo_cert.crt")
 mongo_db = mongo_client["users"]
 mongo_col = mongo_db["details"]
-
-db_name = 'mydb'
-client = None
-db = None
-
-# this is just to support the app on bluemix
-if 'VCAP_SERVICES' in os.environ:
-    vcap = json.loads(os.getenv('VCAP_SERVICES'))
-    print('Found VCAP_SERVICES')
-    if 'cloudantNoSQLDB' in vcap:
-        creds = vcap['cloudantNoSQLDB'][0]['credentials']
-        user = creds['username']
-        password = creds['password']
-        url = 'https://' + creds['host']
-        client = Cloudant(user, password, url=url, connect=True)
-        db = client.create_database(db_name, throw_on_exists=False)
-elif os.path.isfile('vcap-local.json'):
-    with open('vcap-local.json') as f:
-        vcap = json.load(f)
-        print('Found local VCAP_SERVICES')
-        creds = vcap['services']['cloudantNoSQLDB'][0]['credentials']
-        user = creds['username']
-        password = creds['password']
-        url = 'https://' + creds['host']
-        client = Cloudant(user, password, url=url, connect=True)
-        db = client.create_database(db_name, throw_on_exists=False)
 
 # On Bluemix, get the port number from the environment variable PORT
 # When running this app on the local machine, default the port to 8000
@@ -84,34 +55,6 @@ def pay():
         return send_file(IMPATH, mimetype='image/png')
     else:
         abort(500)
-
-
-# these methods aren't used, just there to support the app
-@app.route('/api/visitors', methods=['GET'])
-def get_visitor():
-    if client:
-        return jsonify(list(map(lambda doc: doc['name'], db)))
-    else:
-        print('No database')
-        return jsonify([])
-
-
-@app.route('/api/visitors', methods=['POST'])
-def put_visitor():
-    user = request.json['name']
-    if client:
-        data = {'name': user}
-        db.create_document(data)
-        return 'Hello %s! I added you to the database.' % user
-    else:
-        print('No database')
-        return 'Hello %s!' % user
-
-
-@atexit.register
-def shutdown():
-    if client:
-        client.disconnect()
 
 
 @app.errorhandler(400)
