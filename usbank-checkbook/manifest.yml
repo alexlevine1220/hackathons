@@ -1,0 +1,7 @@
+---
+applications:
+  - name: usbank-checkbook
+    random-route: true
+    memory: 128M
+    services:
+      - usbank-checkbook-storage
