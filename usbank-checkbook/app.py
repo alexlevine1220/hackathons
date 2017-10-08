@@ -46,15 +46,22 @@ def pay():
         payload['description'] = req['description']
 
     resp = requests.post("https://sandbox.checkbook.io/v3/check/digital", headers=auth_header, json=payload)
-
     if resp.ok:
-        img = requests.get(resp.json().get('image_uri'))
-        IMPATH = 'check.png'
-        with open(IMPATH, 'w') as f:
-            f.write(img.content)
+        IMPATH = 'check2.png'
+        # TODO: Actually serve live check (currently serving static check)
+        # since otherwise we need to add a delay until check is ready
+        # img = requests.get(resp.json().get('image_uri'))
+        # if img.ok:
+        #     with open(IMPATH, 'wb') as f:
+        #         f.write(img.content)
         return send_file(IMPATH, mimetype='image/png')
     else:
         abort(500)
+
+
+@app.route('/check', methods=['GET'])
+def serve_check_image():
+    return send_file('check2.png', mimetype='image/png')
 
 
 @app.errorhandler(400)
