@@ -11,11 +11,11 @@ are likely to occur anywhere outside of documented usage. :)
 ## Prerequisites
 
 You'll need the following:
-* [Bluemix account]()
+* [Bluemix account](https://checkbook.slack.com/archives/C6A80J3M5/p1507452223000070)
 * [Bluemix CloudFoundry app](https://console.bluemix.net/apps/0fd78d1b-7654-4790-a4ac-0f1335b69d3c?paneId=overview&ace_config=%7B%22region%22%3A%22us-south%22%2C%22orgGuid%22%3A%223c7aad52-e795-4f7b-b304-b06b8f6a81b9%22%2C%22spaceGuid%22%3A%22a4bf6624-e298-4880-9c12-5cf9131dadec%22%2C%22redirect%22%3A%22https%3A%2F%2Fconsole.bluemix.net%2Fdashboard%2Fcf-apps%3Fenv_id%3Dibm%253Ayp%253Aus-south%22%2C%22bluemixUIVersion%22%3A%22Atlas%22%7D&env_id=ibm:yp:us-south)
 * [Bluemix cheat-sheet](https://github.com/LennartFr/BlueMix-cheat-sheet/blob/master/README.md)
-* [MongoDB credentials](): Value of environment variable `MONGO_URI`
-* [MongoDB SSL certificate](): Contents of file `mongo_cert.crt` at the top level
+* [MongoDB credentials](https://checkbook.slack.com/archives/C6A80J3M5/p1507452271000050): Value of environment variable `MONGO_URI`
+* [MongoDB SSL certificate](https://checkbook.slack.com/files/U7EBB6196/F7G58MWF9/mongo_cert_crt.diff): Contents of file `mongo_cert.crt` at the top level
 
 The app appends to [this Bluemix starter app](https://github.com/IBM-Bluemix/get-started-python) 
 so that deployment is straightforward (`bluemix app push usbank-checkbook`) - and free.
